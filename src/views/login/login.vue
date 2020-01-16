@@ -16,7 +16,7 @@
           </template>
       </van-field>
     </van-cell-group>
-    <van-button size="large" class="loginBtn">登录</van-button>
+    <van-button size="large" class="loginBtn" @click="login">登录</van-button>
     <div class="clause">
       <a href="#">隐私条款</a>
     </div>
@@ -24,6 +24,8 @@
 </template>
 
 <script>
+import { Toast } from 'vant'
+import axios from 'axios'
 export default {
   data () {
     return {
@@ -34,7 +36,27 @@ export default {
     }
   },
   methods: {
-
+    login () {
+      if (this.obj.mobile.length !== 11) {
+        Toast('请输入11位数的手机号')
+        return false
+      }
+      if (this.obj.code.length !== 6) {
+        Toast('请输入6位数的验证码')
+        return false
+      }
+      axios({
+        url: 'http://ttapi.research.itcast.cn/app/v1_0/authorizations',
+        method: 'post',
+        data: {
+          mobile: this.obj.mobile,
+          code: this.obj.code
+        }
+      }).then(res => {
+        window.localStorage.setItem('token', JSON.stringify(res.data.data))
+        window.console.log(window.localStorage.getItem('token'))
+      })
+    }
   }
 }
 </script>
