@@ -2,6 +2,8 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+// 导入base
+import './style/base.css'
 // 导入vant插件
 import Vant from 'vant'
 import 'vant/lib/index.css'
