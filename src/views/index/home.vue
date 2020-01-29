@@ -9,7 +9,7 @@
         <!-- 绑定channelsList遍历出来的每个item里的属性 -->
         <van-pull-refresh v-model="item.isLoading" @refresh="onRefresh">
         <van-list v-model="item.loading" :finished="item.finished" finished-text="没有更多了" @load="onLoad">
-          <van-cell v-for="item in item.list" :key="item" :title="item.title" />
+          <van-cell class="mycell" v-for="item in item.list" :key="item" :title="item.title" />
         </van-list>
         </van-pull-refresh>
         <!-- 下拉列表 -->
@@ -88,7 +88,7 @@ export default {
       // 清除当前频道中的所有的数据
       currentChannle.loading = false
       currentChannle.finished = false
-      currentChannle.isloading = false
+      currentChannle.isLoading = false
       currentChannle.list = []
       // 清空之后重新加载数据
       this.onLoad()
@@ -179,6 +179,9 @@ export default {
     width: 10%;
     line-height: 44px;
     text-align: center;
+  }
+  .mycell {
+    height: 150px;
   }
 }
 </style>
