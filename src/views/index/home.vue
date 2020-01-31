@@ -14,10 +14,16 @@
         </van-pull-refresh>
         <!-- 下拉列表 -->
       </van-tab>
-    <div class="menus">
+    <div class="menus" @click="openChanels">
       <van-icon name="wap-nav" />
     </div>
     </van-tabs>
+    <!-- 弹出层 -->
+    <van-popup
+  v-model="show"
+  position="bottom"
+  :style="{ height: '90%' }"
+/>
   </div>
 </template>
 
@@ -36,7 +42,8 @@ export default {
       // list: [], // 数据源
       // isLoading: false, // 下拉刷新的属性
       channelsList: [], // 标签栏列表
-      active: 0// 频道的索引
+      active: 0, // 频道的索引
+      show: false // 弹出层的默认选项
     }
   },
   methods: {
@@ -111,6 +118,10 @@ export default {
         this.$set(item, 'isLoading', false)
         this.$set(item, 'list', [])
       })
+    },
+    // 打开弹出层
+    openChanels () {
+      this.show = true
     }
   },
   // 打开页面时得到频道数据
@@ -141,7 +152,7 @@ export default {
         }
       }
     } catch {
-      this.$toast.fail('出错啦')
+      this.$toast.fail('请重新登录')
     }
     // 打印一下频道数据
     window.console.log(this.channelsList)
