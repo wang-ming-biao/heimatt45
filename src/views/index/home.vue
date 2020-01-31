@@ -9,7 +9,7 @@
         <!-- 绑定channelsList遍历出来的每个item里的属性 -->
         <van-pull-refresh v-model="item.isLoading" @refresh="onRefresh">
         <van-list v-model="item.loading" :finished="item.finished" finished-text="没有更多了" @load="onLoad">
-          <van-cell class="mycell" v-for="item in item.list" :key="item" :title="item.title" />
+          <van-cell class="mycell" v-for="(item, index) in item.list" :key="index" :title="item.title" />
         </van-list>
         </van-pull-refresh>
         <!-- 下拉列表 -->
@@ -18,12 +18,8 @@
       <van-icon name="wap-nav" />
     </div>
     </van-tabs>
-    <!-- 弹出层 -->
-    <van-popup
-  v-model="show"
-  position="bottom"
-  :style="{ height: '90%' }"
-/>
+    <!-- 弹出框 -->
+    <mypop v-model="show" />
   </div>
 </template>
 
@@ -34,6 +30,8 @@ import { apiGetChannels } from '../../api/channels.js'
 import { getLocal } from '../../utils/local.js'
 // 导入获取频道新闻推荐方法
 import { apiGetArticleList } from '../../api/aritcle.js'
+// 导入频道弹窗的方法
+import mypop from './components/mypop'
 export default {
   data () {
     return {
@@ -43,7 +41,7 @@ export default {
       // isLoading: false, // 下拉刷新的属性
       channelsList: [], // 标签栏列表
       active: 0, // 频道的索引
-      show: false // 弹出层的默认选项
+      show: false // 频道弹出层的默认值
     }
   },
   methods: {
@@ -158,6 +156,9 @@ export default {
     window.console.log(this.channelsList)
     // 给频道数据添加额外的属性
     this.addOtherProp()
+  },
+  components: {
+    mypop
   }
 }
 </script>
