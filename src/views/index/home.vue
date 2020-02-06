@@ -18,8 +18,8 @@
       <van-icon name="wap-nav" />
     </div>
     </van-tabs>
-    <!-- 弹出框 -->
-    <mypop v-model="show" :channelsList="channelsList" />
+    <!-- 弹出框:传入频道列表,频道下标active -->
+    <mypop v-model="show" :channelsList="channelsList" :active="active" />
   </div>
 </template>
 

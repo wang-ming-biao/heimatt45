@@ -31,7 +31,8 @@
 <van-grid>
   <van-grid-item class="myfn" v-for="(item, index) in channelsList " :key="index" >
       <template slot="text">
-          <span class="myName">{{ item.name }}</span><van-icon @click="remChannel(item)" v-show="showIcon" class="mysn" name="clear" />
+        <!-- 动态绑定active类名 -->
+          <span :class="{active: active === index}" class="myName">{{ item.name }}</span><van-icon @click="remChannel(item)" v-show="showIcon && index !== 0" class="mysn" name="clear" />
       </template>
   </van-grid-item>
 </van-grid>
@@ -58,7 +59,8 @@
 import { apiGetAllChannel, apiSetChannel } from '../../../api/channels'
 import { setLocal } from '../../../utils/local'
 export default {
-  props: ['value', 'channelsList'],
+  // 控制面板的显示与隐藏 我的频道列表 选中的频道
+  props: ['value', 'channelsList', 'active'],
   data () {
     return {
       showIcon: false, // 频道选项修改
@@ -79,10 +81,10 @@ export default {
     // 将全部频道中被点击的频道添加到我的频道
     async addChannel (item) {
       // 动态添加其他的额外属性,解决切换新页面报错问题
-      currentChannle.loading = false
-      currentChannle.finished = false
-      currentChannle.isLoading = false
-      currentChannle.list = []
+      this.$set(item, 'loading', false)
+      this.$set(item, 'finished', false)
+      this.$set(item, 'isLoading', false)
+      this.$set(item, 'list', [])
       // 点击频道后将频道传入我的频道
       this.channelsList.push(item)
       // 将我的频道数据进行保存: 判断用户是否登录
@@ -107,9 +109,34 @@ export default {
       }
     },
     // 将我的频道中被点击的频道添加到全部频道中
-    remChannel (item) {
+    async remChannel (obj) {
       // 点击我的频道上的xx图标进行修改
-      this.channelsList.push(item)
+      this.channelsList.forEach((item, index) => {
+        // 判断删除的频道id与全部频道ID是否一致
+        if (item.id === obj.id) {
+          // 将当前元素删除, splice 删除指定下标的元素
+          this.channelsList.splice(index, 1)
+        }
+      })
+      // 判断用户是否登录
+      let user = this.$store.state.user
+      // 如果用户已经登录,
+      if (user.token) {
+        // 生成频道数组
+        let channels = []
+        // 遍历我的频道,去除默认的第一个
+        this.channelsList.slice(1).forEach((item, index) => {
+          // 将遍历后的数据push进新的频道数组
+          channels.push({
+            id: item.id,
+            seq: index + 2
+          })
+        })
+        // 将数据提交到服务器
+        await apiSetChannel(channels)
+      } else { // 未登录的保存
+        setLocal('channels', this.channelsList)
+      }
     }
   },
   // 生命周期钩子
@@ -156,6 +183,9 @@ export default {
 }
 .myName {
   color: #646566;
+}
+.active {
+  color: red;
 }
 
 </style>
