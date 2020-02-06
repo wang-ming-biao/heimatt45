@@ -19,7 +19,7 @@
     </div>
     </van-tabs>
     <!-- 弹出框 -->
-    <mypop v-model="show" />
+    <mypop v-model="show" :channelsList="channelsList" />
   </div>
 </template>
 
@@ -40,7 +40,7 @@ export default {
       // list: [], // 数据源
       // isLoading: false, // 下拉刷新的属性
       channelsList: [], // 标签栏列表
-      active: 0, // 频道的索引
+      active: 0, // 频道的默认下标
       show: false // 频道弹出层的默认值
     }
   },
