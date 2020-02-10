@@ -5,13 +5,13 @@ import store from './store'
 // 导入base
 import './style/base.css'
 // 导入vant插件
-import Vant from 'vant'
+import Vant, { Lazyload } from 'vant'
 import 'vant/lib/index.css'
 // 导入 iconfont
 import './style/index.css'
 
 Vue.config.productionTip = false
-Vue.use(Vant)
+Vue.use(Vant, Lazyload)
 
 new Vue({
   router,

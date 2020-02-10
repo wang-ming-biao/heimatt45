@@ -29,7 +29,7 @@
 </van-cell>
 <!-- 使用Grid 宫格设置标签的弹出框的子选项布局 -->
 <van-grid>
-  <van-grid-item class="myfn" v-for="(item, index) in channelsList " :key="index" >
+  <van-grid-item class="myfn" @click="changeActive(index) " v-for="(item, index) in channelsList" :key="index" >
       <template slot="text">
         <!-- 动态绑定active类名 -->
           <span :class="{active: active === index}" class="myName">{{ item.name }}</span><van-icon @click="remChannel(item)" v-show="showIcon && index !== 0" class="mysn" name="clear" />
@@ -87,7 +87,7 @@ export default {
       this.$set(item, 'list', [])
       // 点击频道后将频道传入我的频道
       this.channelsList.push(item)
-      // 将我的频道数据进行保存: 判断用户是否登录
+      // 将我的频道数据进行保存: 判断用户是否
       // 得到用户的登陆信息
       let user = this.$store.state.user
       // 如果登陆
@@ -137,6 +137,11 @@ export default {
       } else { // 未登录的保存
         setLocal('channels', this.channelsList)
       }
+    },
+    // 切换高亮选线
+    changeActive (index) {
+      // 将数据交给home
+      this.$emit('update:active', index)
     }
   },
   // 生命周期钩子

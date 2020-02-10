@@ -8,9 +8,32 @@
         <!-- onRefresh: 事件,当下拉时会触发这个事件 -->
         <!-- 绑定channelsList遍历出来的每个item里的属性 -->
         <van-pull-refresh v-model="item.isLoading" @refresh="onRefresh">
+          <lazy-component>
         <van-list v-model="item.loading" :finished="item.finished" finished-text="没有更多了" @load="onLoad">
-          <van-cell class="mycell" v-for="(item, index) in item.list" :key="index" :title="item.title" />
+          <van-cell class="mycell" v-for="(subitem, subindex) in item.list" :key="subindex" >
+            <template slot="title">
+              <!-- 内容的标题 -->
+              <div>{{ subitem.title }}</div>
+              <!-- 图片内容 -->
+              <van-grid :border="false" :column-num="3">
+                <van-grid-item v-for="(imgitem, imgindex) in subitem.cover.images" :key="imgindex">
+                  <van-image  :src="imgitem" />
+                </van-grid-item>
+              </van-grid>
+              <div class="otherBox">
+                <div class="other">
+                <span>{{ subitem.aut_name }}</span>
+                <span>{{ subitem.comm_count }} 评论</span>
+                <span>{{ subitem.pubdate }}</span>
+              </div>
+              <div class="more">
+                <van-icon name="cross" />
+              </div>
+              </div>
+            </template>
+          </van-cell>
         </van-list>
+        </lazy-component>
         </van-pull-refresh>
         <!-- 下拉列表 -->
       </van-tab>
@@ -19,7 +42,10 @@
     </div>
     </van-tabs>
     <!-- 弹出框:传入频道列表,频道下标active -->
-    <mypop v-model="show" :channelsList="channelsList" :active="active" />
+    <mypop v-model="show" :channelsList="channelsList" :active="active" @update:active="active=$event" />
+    <!-- 由于父传子,子传夫都是在操控active,所以通过修改代码进行简化 -->
+    <!-- <mypop v-model="show" :channelsList="channelsList" :active.sync="active" /> -->
+    <!-- 在父组件绑定cactive事件,双向绑定弹出层与首页的频道变化 -->
   </div>
 </template>
 
@@ -192,8 +218,24 @@ export default {
     line-height: 44px;
     text-align: center;
   }
-  .mycell {
-    height: 150px;
+  .otherBox {
+    display:flex;
+    justify-content: space-between;
+    .more {
+      border: 1px solid #ccc;
+      height: 15px;
+      // width: 20px;
+      // text-align: center;
+      line-height: 15px;
+      color: #ccc;
+    }
+  }
+  .other {
+    span {
+      font-size: 12px;
+      color: #ccc;
+      margin-right: 10px;
+    }
   }
 }
 </style>
