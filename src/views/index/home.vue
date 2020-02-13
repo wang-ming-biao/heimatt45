@@ -24,10 +24,10 @@
                 <div class="other">
                 <span>{{ subitem.aut_name }}</span>
                 <span>{{ subitem.comm_count }} 评论</span>
-                <span>{{ subitem.pubdate }}</span>
+                <span>{{ subitem.pubdate | timefilter}}</span>
               </div>
               <div class="more">
-                <van-icon name="cross" />
+                <van-icon name="cross" @click="shouMore" />
               </div>
               </div>
             </template>
@@ -46,6 +46,10 @@
     <!-- 由于父传子,子传夫都是在操控active,所以通过修改代码进行简化 -->
     <!-- <mypop v-model="show" :channelsList="channelsList" :active.sync="active" /> -->
     <!-- 在父组件绑定cactive事件,双向绑定弹出层与首页的频道变化 -->
+    <!-- 更多操作:传值给子组件与接收子组件数据 -->
+    <!-- <more :value="moreShow" @input="moreShow=$event" /> -->
+    <!-- 由于传入与接收都是操控moreShow属性,所以可以写成下方的简写模式 -->
+    <more v-model="moreShow" />
   </div>
 </template>
 
@@ -58,6 +62,7 @@ import { getLocal } from '../../utils/local.js'
 import { apiGetArticleList } from '../../api/aritcle.js'
 // 导入频道弹窗的方法
 import mypop from './components/mypop'
+import more from './components/more'
 export default {
   data () {
     return {
@@ -67,7 +72,8 @@ export default {
       // isLoading: false, // 下拉刷新的属性
       channelsList: [], // 标签栏列表
       active: 0, // 频道的默认下标
-      show: false // 频道弹出层的默认值
+      show: false, // 频道弹出层的默认值
+      moreShow: false // 控制更多操作选项显示隐藏
     }
   },
   methods: {
@@ -146,6 +152,10 @@ export default {
     // 打开弹出层
     openChanels () {
       this.show = true
+    },
+    // 打开更多选项弹出框
+    shouMore () {
+      this.moreShow = true
     }
   },
   // 打开页面时得到频道数据
@@ -184,7 +194,8 @@ export default {
     this.addOtherProp()
   },
   components: {
-    mypop
+    mypop,
+    more
   }
 }
 </script>
