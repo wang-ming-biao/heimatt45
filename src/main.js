@@ -2,10 +2,11 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+// 导入json-bigint插件
 // 导入base
 import './style/base.css'
 // 导入vant插件
-import Vant, { Lazyload } from 'vant'
+import Vant, { Lazyload, Toast } from 'vant'
 import 'vant/lib/index.css'
 // 导入 iconfont
 import './style/index.css'
@@ -28,6 +29,9 @@ import './filter/timeFilter'
 // dayjs.locale('zh-cn')
 // 使用 vant , lazyload懒加载
 Vue.use(Vant)
+// 导入轻提示组件
+Vue.use(Toast)
+// 导入懒加载组件
 Vue.use(Lazyload, {
   lazyComponent: true
 })

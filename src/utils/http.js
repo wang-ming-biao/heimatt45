@@ -2,10 +2,23 @@
 import axios from 'axios'
 // 导入store
 import store from '../store/index.js'
+// 导入 jsonbig 插件
+import jsonbig from 'json-bigint'
 // 创建一个axios实例
 const instance = axios.create({
   // 设置一个基地址
-  baseURL: 'http://ttapi.research.itcast.cn/app/v1_0/'
+  baseURL: 'http://ttapi.research.itcast.cn/app/v1_0/',
+  // 得到服务器响应的原始数据
+  transformResponse: [function (data) {
+    // 使用 jsonbig 进行转换,但是因为不是所有的id都超过长度,所以要用 try catch 包起来
+    try {
+      return jsonbig.parse(data)
+    } catch (error) {
+      // 如果转换失败的话 则使用传统的 JSON.parse() 进行转换
+      // JSON.parse()其实是 axios 内部的默认处理方式
+      return JSON.parse(data)
+    }
+  }]
 })
 // 设置拦截器
 // 请求拦截器

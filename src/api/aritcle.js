@@ -12,7 +12,41 @@ function apiGetArticleList ({ channelid, timestamp }) {
     }
   })
 }
+// 将文章设置为不喜欢
+function apiDisLike (artid) {
+  return http({
+    url: 'article/dislikes',
+    method: 'post',
+    data: {
+      target: artid
+    }
+  })
+}
+// 设置投诉详情接口,通过对象传入两个必须的参数
+function apiReports ({ artid, reportsType }) {
+  return http({
+    url: 'article/reports',
+    method: 'post',
+    data: {
+      target: artid,
+      type: reportsType
+    }
+  })
+}
+// 拉黑作者
+function apiHate (userID) {
+  return http({
+    url: 'user/blacklists',
+    method: 'post',
+    data: {
+      target: userID
+    }
+  })
+}
 // 暴露方法
 export {
-  apiGetArticleList
+  apiGetArticleList,
+  apiDisLike,
+  apiReports,
+  apiHate
 }

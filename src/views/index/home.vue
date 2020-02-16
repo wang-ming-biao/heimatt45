@@ -27,7 +27,7 @@
                 <span>{{ subitem.pubdate | timefilter}}</span>
               </div>
               <div class="more">
-                <van-icon name="cross" @click="shouMore" />
+                <van-icon name="cross" @click="shouMore(subitem.art_id)" />
               </div>
               </div>
             </template>
@@ -49,7 +49,7 @@
     <!-- 更多操作:传值给子组件与接收子组件数据 -->
     <!-- <more :value="moreShow" @input="moreShow=$event" /> -->
     <!-- 由于传入与接收都是操控moreShow属性,所以可以写成下方的简写模式 -->
-    <more v-model="moreShow" />
+    <more v-model="moreShow" :artid="artid" @delArticle="delArticle" />
   </div>
 </template>
 
@@ -73,7 +73,8 @@ export default {
       channelsList: [], // 标签栏列表
       active: 0, // 频道的默认下标
       show: false, // 频道弹出层的默认值
-      moreShow: false // 控制更多操作选项显示隐藏
+      moreShow: false, // 控制更多操作选项显示隐藏
+      artid: 0 // 当前要操作的id
     }
   },
   methods: {
@@ -154,8 +155,25 @@ export default {
       this.show = true
     },
     // 打开更多选项弹出框
-    shouMore () {
+    shouMore (artid) {
       this.moreShow = true
+      // 打开 更多 页面时,将文章 ID 传给更多页面
+      this.artid = artid
+    },
+    // 设置不感兴趣的文章
+    delArticle (artid) {
+      // 得到数据源: 当前选中频道下的List
+      let dataSource = this.channelsList[this.active].list
+      // 得到不感兴趣的文章 id: this.uk-artid
+      window.console.log(dataSource)
+      // 根据 id 从dataSource 中删除数据
+      dataSource.forEach((item, index) => {
+        // 遍历不感兴趣数组,对照频道列表,对应的进行删除
+        if (item.art_id === artid) {
+          // 删除数据
+          dataSource.splice(index, 1)
+        }
+      })
     }
   },
   // 打开页面时得到频道数据
