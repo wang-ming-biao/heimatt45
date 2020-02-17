@@ -8,7 +8,7 @@
   </van-cell>
   <van-cell @click="dislike" title="不感兴趣" icon="manager-o"></van-cell>
   <van-cell @click="showMore" title="反馈垃圾内容" icon="manager-o" is-link></van-cell>
-  <van-cell @click="hate()" title="拉黑作者" icon="manager-o"></van-cell>
+  <van-cell @click="hate" title="拉黑作者" icon="manager-o"></van-cell>
 </van-dialog>
 <van-dialog v-model="show" :showConfirmButton="false" >
   <template slot="title">
@@ -23,10 +23,10 @@
 
 <script>
 // 导入操作文章的方法,注意封装的方法要加括号
-import { apiDisLike, apiReports } from '@/api/aritcle'
+import { apiDisLike, apiReports, apiHate } from '@/api/aritcle'
 export default {
   // 控制显示隐藏 要操作的文章数据
-  props: ['value', 'artid'],
+  props: ['value', 'artid', 'autid'],
   data () {
     return {
       typeList: [
@@ -92,10 +92,11 @@ export default {
       }
     },
     // 拉黑作者
-    hate () {
-      // await apiHate({
-      //   userID:
-      // })
+    async hate () {
+      // 触发父组件事件
+      this.$emit('hateUser', this.autid)
+      let res = await apiHate(this.autid)
+      window.console.log(res)
     }
   }
 }

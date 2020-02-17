@@ -27,7 +27,7 @@
                 <span>{{ subitem.pubdate | timefilter}}</span>
               </div>
               <div class="more">
-                <van-icon name="cross" @click="shouMore(subitem.art_id)" />
+                <van-icon name="cross" @click="shouMore(subitem.art_id, subitem.aut_id)" />
               </div>
               </div>
             </template>
@@ -49,7 +49,7 @@
     <!-- 更多操作:传值给子组件与接收子组件数据 -->
     <!-- <more :value="moreShow" @input="moreShow=$event" /> -->
     <!-- 由于传入与接收都是操控moreShow属性,所以可以写成下方的简写模式 -->
-    <more v-model="moreShow" :artid="artid" @delArticle="delArticle" />
+    <more v-model="moreShow" :autid="autid" :artid="artid" @delArticle="delArticle" @hateUser="hateUser" />
   </div>
 </template>
 
@@ -74,7 +74,8 @@ export default {
       active: 0, // 频道的默认下标
       show: false, // 频道弹出层的默认值
       moreShow: false, // 控制更多操作选项显示隐藏
-      artid: 0 // 当前要操作的id
+      artid: 0, // 当前要操作的id
+      autid: 0 // 要拉黑的作者id
     }
   },
   methods: {
@@ -155,10 +156,11 @@ export default {
       this.show = true
     },
     // 打开更多选项弹出框
-    shouMore (artid) {
+    shouMore (artid, autid) {
       this.moreShow = true
       // 打开 更多 页面时,将文章 ID 传给更多页面
       this.artid = artid
+      this.autid = autid
     },
     // 设置不感兴趣的文章
     delArticle (artid) {
@@ -172,6 +174,20 @@ export default {
         if (item.art_id === artid) {
           // 删除数据
           dataSource.splice(index, 1)
+        }
+      })
+    },
+    // 拉黑作者
+    hateUser (autid) {
+      // 从当前选中频道下的list中获取到数据源
+      let hateSource = this.channelsList[this.active].list
+      window.console.log(hateSource)
+      // 得到要拉黑的作者id,根据id从hateSource中删除数据
+      hateSource.forEach((item, index) => {
+        // 遍历拉黑数组,对照频道列表,对应的进行删除
+        if (item.aut_id === autid) {
+          // 删除数据
+          hateSource.splice(item.aut_id, 1)
         }
       })
     }

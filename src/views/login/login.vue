@@ -59,7 +59,7 @@ export default {
       //   window.console.log(userInfo)
       // })
       // 点击登录按钮,加载动画显示
-      this.loginLoading = 'true'
+      this.loginLoading = true
       setTimeout(async () => {
         try {
         // 使用导入的axios组件,将api传入
