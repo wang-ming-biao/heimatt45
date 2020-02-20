@@ -10,6 +10,38 @@
         <van-pull-refresh v-model="item.isLoading" @refresh="onRefresh">
           <lazy-component>
         <van-list v-model="item.loading" :finished="item.finished" finished-text="没有更多了" @load="onLoad">
+          <!-- 一张图片的解构 -->
+          <van-cell class="mycell" title="" >
+              <!-- 内容的标题 -->
+            <template slot="label">
+              <div style="display: flex; justify-content: space-between">
+                <div class="lefttitle" style="font-weight: 400px; color: #666; font-size: 14px">
+                  我只有一张图片
+                </div>
+                <div class="rightimg">
+                <!-- 图片内容 -->
+              <van-grid :border="false" :column-num="3">
+                <van-grid-item >
+                  <van-image style="width: 150px; height: 150px" src="https://img.yzcdn.cn/vant/logo.png" />
+                </van-grid-item>
+              </van-grid>
+                </div>
+              </div>
+              <!-- 细节内容 -->
+              <div class="otherBox">
+                <div class="other">
+                <span>作者名称</span>
+                <span>10条评论</span>
+                <span>发布时间</span>
+              </div>
+              <div class="more">
+                <!-- <van-icon name="cross" @click="shouMore(subitem.art_id, subitem.aut_id)" /> -->
+                <van-icon name="cross" @click="shouMore()" />
+              </div>
+              </div>
+            </template>
+          </van-cell>
+          <!-- 三张图片的解构 -->
           <van-cell class="mycell" v-for="(subitem, subindex) in item.list" :key="subindex" >
             <template slot="title">
               <!-- 内容的标题 -->
